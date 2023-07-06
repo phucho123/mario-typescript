@@ -60,6 +60,7 @@ export class HUDScene extends Phaser.Scene {
     }
 
     private updateLives() {
+        console.log('hello there')
         const tmp = this.textElements.get('LIVES')
         if (tmp) tmp.setText(`Lives: ${this.registry.get('lives')}`)
     }

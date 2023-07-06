@@ -13,7 +13,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
     private isVulnerable: boolean
     private vulnerableCounter: number
     private projectiles: Projectile
-    private life: number
+    private lives: number
 
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>
@@ -55,7 +55,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
         this.isDying = false
         this.isVulnerable = true
         this.vulnerableCounter = 100
-        this.life = this.currentScene.registry.get('marioLife')
+        this.lives = this.currentScene.registry.get('lives')
 
         // sprite
         this.setOrigin(0.5, 0.5)
@@ -252,9 +252,10 @@ export class Mario extends Phaser.GameObjects.Sprite {
         this.isVulnerable = false
         if (this.marioSize === 'big') {
             this.shrinkMario()
-        } else if (this.life > 0) {
-            this.life--
-            this.currentScene.registry.set('marioLife', this.life)
+        } else if (this.lives > 0) {
+            this.lives--
+            this.currentScene.registry.set('lives', this.lives)
+            this.currentScene.events.emit('livesChanged')
             this.currentScene.tweens.add({
                 targets: this,
                 alpha: 0,
@@ -286,8 +287,9 @@ export class Mario extends Phaser.GameObjects.Sprite {
         return this.projectiles
     }
 
-    public increaseLife() {
-        this.life++
-        this.currentScene.registry.set('marioLife', this.life)
+    public increaseLives() {
+        this.lives++
+        this.currentScene.registry.set('lives', this.lives)
+        this.currentScene.events.emit('livesChanged')
     }
 }

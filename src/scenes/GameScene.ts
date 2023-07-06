@@ -440,7 +440,7 @@ export class GameScene extends Phaser.Scene {
                 break
             }
             case 'heart': {
-                this.player.increaseLife()
+                this.player.increaseLives()
                 break
             }
             default: {
