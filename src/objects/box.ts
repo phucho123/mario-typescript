@@ -1,4 +1,4 @@
-import { Collectible } from './collectible'
+import { Collectible } from './Collectible'
 import { IBoxConstructor } from '../interfaces/box.interface'
 
 export class Box extends Phaser.GameObjects.Sprite {

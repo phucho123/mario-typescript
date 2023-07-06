@@ -1,12 +1,12 @@
-import { Box } from '../objects/box'
-import { Brick } from '../objects/brick'
-import { Collectible } from '../objects/collectible'
-import { Dino } from '../objects/dino'
-import { Goomba } from '../objects/goomba'
-import { Mario } from '../objects/mario'
-import { Platform } from '../objects/platform'
-import { Portal } from '../objects/portal'
-import { Projectile } from '../objects/projectile'
+import { Box } from '../objects/Box'
+import { Brick } from '../objects/Brick'
+import { Collectible } from '../objects/Collectible'
+import { Dino } from '../objects/Dino'
+import { Goomba } from '../objects/Goomba'
+import { Mario } from '../objects/Mario'
+import { Platform } from '../objects/Platform'
+import { Portal } from '../objects/Portal'
+import { Projectile } from '../objects/Projectile'
 
 export class GameScene extends Phaser.Scene {
     // tilemap

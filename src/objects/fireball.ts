@@ -1,4 +1,4 @@
-import { Enemy } from './enemy'
+import { Enemy } from './Enemy'
 import { ISpriteConstructor } from '../interfaces/sprite.interface'
 
 export class FireBall extends Enemy {

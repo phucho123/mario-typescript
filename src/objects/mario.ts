@@ -1,5 +1,5 @@
 import { ISpriteConstructor } from '../interfaces/sprite.interface'
-import { Projectile } from './projectile'
+import { Projectile } from './Projectile'
 
 export class Mario extends Phaser.GameObjects.Sprite {
     body: Phaser.Physics.Arcade.Body
