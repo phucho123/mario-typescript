@@ -16,6 +16,7 @@ export class HUDScene extends Phaser.Scene {
             ['COINS', this.addText(80, 8, `${this.registry.get('coins')}`)],
             ['WORLD', this.addText(96, 8, `${this.registry.get('world')}`)],
             ['TIME', this.addText(136, 8, `${this.registry.get('time')}`)],
+            ['FLOWERS', this.addText(172, 0, `FLOWERx ${this.registry.get('flowers')}`)],
         ])
 
         // create events
@@ -23,6 +24,7 @@ export class HUDScene extends Phaser.Scene {
         level.events.on('coinsChanged', this.updateCoins, this)
         level.events.on('scoreChanged', this.updateScore, this)
         level.events.on('livesChanged', this.updateLives, this)
+        level.events.on('flowersChanged', this.updateFlowers, this)
 
         // add timer
         this.timer = this.time.addEvent({
@@ -60,8 +62,12 @@ export class HUDScene extends Phaser.Scene {
     }
 
     private updateLives() {
-        console.log('hello there')
         const tmp = this.textElements.get('LIVES')
-        if (tmp) tmp.setText(`Lives: ${this.registry.get('lives')}`)
+        if (tmp) tmp.setText(`MARIOx ${this.registry.get('lives')}`)
+    }
+
+    private updateFlowers() {
+        const tmp = this.textElements.get('FLOWERS')
+        if (tmp) tmp.setText(`FLOWERx ${this.registry.get('flowers')}`)
     }
 }

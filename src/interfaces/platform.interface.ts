@@ -1,6 +1,8 @@
+import { TweenProps } from './tween-props.interface'
+
 export interface IPlatformConstructor {
     scene: Phaser.Scene
-    tweenProps: any
+    tweenProps: TweenProps
     x: number
     y: number
     texture: string

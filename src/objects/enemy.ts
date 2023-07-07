@@ -31,6 +31,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         // physics
         this.currentScene.physics.world.enable(this)
         this.body.setSize(this.displayWidth, this.displayHeight)
+        this.body.setOffset(0, 0)
     }
 
     protected showAndAddScore(): void {
@@ -38,7 +39,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         this.currentScene.events.emit('scoreChanged')
 
         const scoreText = this.currentScene.add
-            .dynamicBitmapText(this.x, this.y - 20, 'font', this.dyingScoreValue.toString(), 4)
+            .dynamicBitmapText(this.x, this.y - 20, 'font', this.dyingScoreValue.toString(), 8)
             .setOrigin(0, 0)
 
         this.currentScene.add.tween({

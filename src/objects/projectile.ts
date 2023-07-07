@@ -1,71 +1,68 @@
-import { IPlatformConstructor } from '../interfaces/platform.interface'
+import { ISpriteConstructor } from '../interfaces/sprite.interface'
 
-export class Projectile extends Phaser.GameObjects.Image {
+export class Projectile extends Phaser.GameObjects.Sprite {
     body: Phaser.Physics.Arcade.Body
-    private shotTween: Phaser.Tweens.Tween
 
     // variables
-    private currentScene: Phaser.Scene
-    //   private tweenProps: any;
+    protected currentScene: Phaser.Scene
+    protected isActivated: boolean
+    protected isDying: boolean
+    protected speed: number
+    protected dyingScoreValue: number
     private shotting: boolean
 
-    constructor(aParams: IPlatformConstructor) {
+    constructor(aParams: ISpriteConstructor) {
         super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)
 
         // variables
-        this.currentScene = aParams.scene
-        // this.tweenProps = aParams.tweenProps;
-
-        this.initImage()
-        // this.initTween();
-        this.currentScene.add.existing(this)
         this.shotting = true
+        this.currentScene = aParams.scene
+        this.initSprite()
+        this.currentScene.add.existing(this)
     }
 
-    private initImage(): void {
-        // image
+    protected initSprite() {
+        // variables
+        this.isActivated = false
+        this.isDying = false
+
+        // sprite
         this.setOrigin(0, 0)
         this.setFrame(0)
 
         // physics
         this.currentScene.physics.world.enable(this)
+        this.setScale(16 / this.displayWidth, 8 / this.displayHeight).setAlpha(0)
         this.body.setSize(16, 8)
         this.body.setAllowGravity(false)
-        this.body.setImmovable(true)
-        this.setScale(16 / this.displayWidth, 8 / this.displayHeight).setAlpha(0)
+        // this.body.setSize(this.displayWidth, this.displayHeight)
     }
 
-    private initTween(x: number, y: number, flipX: boolean, tweenProps: any): void {
-        this.x = x
-        this.y = y
-        this.setFlipX(flipX)
-        this.shotTween = this.currentScene.tweens.add({
-            targets: this,
-            props: tweenProps,
-            ease: 'Power0',
-            yoyo: false,
-            repeat: 0,
-            onComplete: () => {
-                this.shotting = true
-            },
-        })
-    }
-
-    public shot(x: number, y: number, flipX: boolean, tweenProps: any) {
+    public shot(x: number, y: number, flipX: boolean) {
         if (this.shotting) {
             this.shotting = false
             this.setAlpha(1)
-            this.initTween(x, y, flipX, tweenProps)
+            this.y = y
+            this.setFlipX(flipX)
+            if (flipX) {
+                this.x = x - 8
+                this.body.setAccelerationX(-2000)
+            } else {
+                this.x = x + 8
+                this.body.setAccelerationX(2000)
+            }
         }
     }
 
     public stopShot() {
         this.setAlpha(0)
-        this.currentScene.tweens.remove(this.shotTween)
         this.shotting = true
+        this.body.setAccelerationX(0)
+        this.body.setVelocityX(0)
     }
 
-    update(): void {
+    public update(): void {
         ///
+        if (this.x > this.currentScene.sys.canvas.width || this.x < 0) this.stopShot()
     }
 }

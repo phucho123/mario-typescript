@@ -34,7 +34,7 @@ export class Portal extends Phaser.GameObjects.Zone {
         this.body.setImmovable(true)
     }
 
-    update(): void {
+    public update(): void {
         ///
     }
 }

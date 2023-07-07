@@ -1,3 +1,4 @@
+import { TweenBoxProps, TweenProps } from '../interfaces/tween-props.interface'
 import { Box } from '../objects/Box'
 import { Brick } from '../objects/Brick'
 import { Collectible } from '../objects/Collectible'
@@ -104,7 +105,9 @@ export class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.enemies, this.boxes)
         this.physics.add.collider(this.enemies, this.bricks)
         this.physics.add.collider(this.player, this.bricks)
-        this.physics.add.collider(this.player.getProjectiles(), this.foregroundLayer)
+        this.physics.add.collider(this.player.getProjectiles(), this.foregroundLayer, () =>
+            this.player.getProjectiles().stopShot()
+        )
 
         this.physics.add.collider(
             this.player,
@@ -170,15 +173,15 @@ export class GameScene extends Phaser.Scene {
         // get the object layer in the tilemap named 'objects'
         const tmp = this.map.getObjectLayer('objects')
         if (!tmp) return
-        const objects = tmp.objects as any[]
+        const objects = tmp.objects
 
         objects.forEach((object) => {
             if (object.type === 'portal') {
                 this.portals.add(
                     new Portal({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         height: object.width,
                         width: object.height,
                         spawn: {
@@ -203,8 +206,8 @@ export class GameScene extends Phaser.Scene {
                 this.enemies.add(
                     new Goomba({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: 'goombaColor',
                     })
                 )
@@ -214,8 +217,8 @@ export class GameScene extends Phaser.Scene {
                 this.enemies.add(
                     new Dino({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: 'dino',
                     })
                 )
@@ -225,8 +228,8 @@ export class GameScene extends Phaser.Scene {
                 this.bricks.add(
                     new Brick({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: 'brick',
                         value: 50,
                     })
@@ -239,8 +242,8 @@ export class GameScene extends Phaser.Scene {
                         scene: this,
                         content: object.properties[0].value,
                         // content: object.properties.content,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: 'box',
                     })
                 )
@@ -250,8 +253,8 @@ export class GameScene extends Phaser.Scene {
                 this.collectibles.add(
                     new Collectible({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: object.properties[0].value,
                         // texture:object.properties.kindOfCollectible,
                         points: 100,
@@ -263,8 +266,8 @@ export class GameScene extends Phaser.Scene {
                 this.platforms.add(
                     new Platform({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: 'platform',
                         tweenProps: {
                             y: {
@@ -272,7 +275,7 @@ export class GameScene extends Phaser.Scene {
                                 duration: 1500,
                                 ease: 'Power0',
                             },
-                        },
+                        } as TweenProps,
                     })
                 )
             }
@@ -281,16 +284,16 @@ export class GameScene extends Phaser.Scene {
                 this.platforms.add(
                     new Platform({
                         scene: this,
-                        x: object.x,
-                        y: object.y,
+                        x: object.x as number,
+                        y: object.y as number,
                         texture: 'platform',
                         tweenProps: {
                             x: {
-                                value: object.x + 50,
+                                value: (object.x as number) + 50,
                                 duration: 1200,
                                 ease: 'Power0',
                             },
-                        },
+                        } as TweenProps,
                     })
                 )
             }
@@ -365,7 +368,7 @@ export class GameScene extends Phaser.Scene {
                     break
                 }
                 case 'rotatingCoin': {
-                    _box.tweenBoxContent({ y: _box.y - 40, alpha: 0 }, 700, function () {
+                    _box.tweenBoxContent({ y: _box.y - 40, alpha: 0 }, 700, () => {
                         const tmp = _box.getContent()
                         if (tmp) tmp.destroy()
                     })
@@ -374,7 +377,7 @@ export class GameScene extends Phaser.Scene {
                     break
                 }
                 case 'flower': {
-                    _box.tweenBoxContent({ y: _box.y - 8 }, 200, function () {
+                    _box.tweenBoxContent({ y: _box.y - 18, alpha: 1 } as TweenBoxProps, 200, () => {
                         const tmp = _box.getContent()
                         if (tmp) tmp.anims.play('flower')
                     })
@@ -430,6 +433,7 @@ export class GameScene extends Phaser.Scene {
     private handlePlayerCollectiblesOverlap(_player: Mario, _collectible: Collectible): void {
         switch (_collectible.texture.key) {
             case 'flower': {
+                this.player.increaseFlower(1)
                 break
             }
             case 'mushroom': {
@@ -440,7 +444,7 @@ export class GameScene extends Phaser.Scene {
                 break
             }
             case 'heart': {
-                this.player.increaseLives()
+                this.player.increaseLives(1)
                 break
             }
             default: {

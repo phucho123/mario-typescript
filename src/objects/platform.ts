@@ -1,11 +1,12 @@
 import { IPlatformConstructor } from '../interfaces/platform.interface'
+import { TweenProps } from '../interfaces/tween-props.interface'
 
 export class Platform extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body
 
     // variables
     private currentScene: Phaser.Scene
-    private tweenProps: any
+    private tweenProps: TweenProps
 
     constructor(aParams: IPlatformConstructor) {
         super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)

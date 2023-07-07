@@ -16,10 +16,18 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.add.image(0, 0, 'title').setOrigin(0, 0)
+        const image = this.add.image(0, 0, 'title').setOrigin(0, 0)
+        image.displayWidth = this.sys.canvas.width
+        image.displayHeight = this.sys.canvas.height
 
         this.bitmapTexts.push(
-            this.add.bitmapText(this.sys.canvas.width / 2 - 22, 105, 'font', 'START', 8)
+            this.add.bitmapText(
+                this.sys.canvas.width / 2 - 22,
+                this.sys.canvas.height * 0.8,
+                'font',
+                'START',
+                16
+            )
         )
     }
 
@@ -41,5 +49,6 @@ export class MenuScene extends Phaser.Scene {
         this.registry.set('lives', 2)
         this.registry.set('spawn', { x: 32, y: 44, dir: 'down' })
         this.registry.set('marioSize', 'small')
+        this.registry.set('flowers', 0)
     }
 }

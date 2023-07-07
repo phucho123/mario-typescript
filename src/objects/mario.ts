@@ -14,6 +14,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
     private vulnerableCounter: number
     private projectiles: Projectile
     private lives: number
+    private flowers: number
 
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>
@@ -37,13 +38,6 @@ export class Mario extends Phaser.GameObjects.Sprite {
             x: this.x,
             y: this.y,
             texture: 'projectile',
-            tweenProps: {
-                y: {
-                    value: 50,
-                    duration: 1500,
-                    ease: 'Power0',
-                },
-            },
         })
     }
 
@@ -56,6 +50,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
         this.isVulnerable = true
         this.vulnerableCounter = 100
         this.lives = this.currentScene.registry.get('lives')
+        this.flowers = this.currentScene.registry.get('flowers')
 
         // sprite
         this.setOrigin(0.5, 0.5)
@@ -87,6 +82,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
             this.handleInput()
             this.handleAnimations()
         } else {
+            this.projectiles.update()
             // this.setFrame(12);
             this.setFrame(3)
             if (this.y > 288) {
@@ -143,19 +139,9 @@ export class Mario extends Phaser.GameObjects.Sprite {
 
         //handle Shotting
         const shot = this.keys.get('SHOT')
-        if (shot && shot.isDown) {
-            this.projectiles.shot(this.x, this.y, this.flipX, {
-                x: {
-                    value: this.x + (this.flipX ? -500 : 500),
-                    duration: 3000,
-                    ease: 'Power0',
-                },
-                alpha: {
-                    value: 0,
-                    duration: 3000,
-                    ease: 'Power0',
-                },
-            })
+        if (shot && shot.isDown && this.flowers > 0) {
+            this.projectiles.shot(this.x, this.y, this.flipX)
+            this.increaseFlower(-1)
         }
     }
 
@@ -224,9 +210,19 @@ export class Mario extends Phaser.GameObjects.Sprite {
     private adjustPhysicBodyToSmallSize(): void {
         // this.body.setSize(6, 12);
         // this.body.setOffset(6, 4);
+        if (this.texture.key != 'marioColor') {
+            this.y += 18
+            this.currentScene.tweens.add({
+                targets: this,
+                alpha: 0,
+                yoyo: true,
+                repeat: 3,
+                duration: 100,
+            })
+        }
         this.setTexture('marioColor')
-        this.body.setSize(10, 16)
-        this.body.setOffset(6, 2)
+        this.body.setSize(10, 14)
+        this.body.setOffset(6, 4)
         // this.body.setOffset(6, 4);
     }
 
@@ -287,9 +283,15 @@ export class Mario extends Phaser.GameObjects.Sprite {
         return this.projectiles
     }
 
-    public increaseLives() {
-        this.lives++
+    public increaseLives(increaseNumber: number) {
+        this.lives += increaseNumber
         this.currentScene.registry.set('lives', this.lives)
         this.currentScene.events.emit('livesChanged')
+    }
+
+    public increaseFlower(increaseNumber: number) {
+        this.flowers += increaseNumber
+        this.currentScene.registry.set('flowers', this.flowers)
+        this.currentScene.events.emit('flowersChanged')
     }
 }

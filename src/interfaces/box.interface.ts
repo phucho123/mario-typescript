@@ -1,6 +1,6 @@
 export interface IBoxConstructor {
     scene: Phaser.Scene
-    content: any
+    content: string
     x: number
     y: number
     texture: string

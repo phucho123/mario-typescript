@@ -59,6 +59,7 @@ export class Dino extends Enemy {
         this.body.setVelocityX(40)
         this.body.setVelocityY(-40)
         this.setFlipY(true)
+        this.showAndAddScore()
     }
 
     public isDead(): void {

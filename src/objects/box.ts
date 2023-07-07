@@ -1,5 +1,6 @@
 import { Collectible } from './Collectible'
 import { IBoxConstructor } from '../interfaces/box.interface'
+import { TweenBoxProps } from '../interfaces/tween-props.interface'
 
 export class Box extends Phaser.GameObjects.Sprite {
     body: Phaser.Physics.Arcade.Body
@@ -78,7 +79,7 @@ export class Box extends Phaser.GameObjects.Sprite {
         return this.content
     }
 
-    public tweenBoxContent(props: any, duration: number, complete: () => void): void {
+    public tweenBoxContent(props: TweenBoxProps, duration: number, complete: () => void): void {
         this.hitBoxTimeline.add([
             {
                 tween: {
